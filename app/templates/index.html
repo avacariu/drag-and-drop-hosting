@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div id="drop-zone">
+  <div id="drop-mask"></div>
+  <h1>dotfile</h1>
+  <span id="status"></span>
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script>
+  function FileUpload(file) {
+    var reader = new FileReader();
+    var xhr = new XMLHttpRequest();
+    this.xhr = xhr;
+
+    xhr.addEventListener("load", function(e){
+      // TODO: make this more reliable and use url_for
+      window.location = "{{ url_for('item', uuid='') }}" + xhr.response.uuid;
+    });
+    xhr.open("POST", "{{ url_for('items') }}");
+
+    var formData = new FormData();
+    formData.append("file", file, file.name);
+    xhr.responseType = "json";
+    xhr.send(formData);
+  }
+
+  function updateStatus(message) {
+    var status = document.getElementById("status");
+    status.textContent = message;
+  }
+
+  function handleFileSelect(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    updateStatus("it's uploading");
+
+    var files = evt.dataTransfer.files; // FileList object.
+
+    if (files.length !== 1) {
+      updateStatus("only one file, please");
+      $("#drop-zone").removeClass('dragover');
+      $("#drop-mask").hide();
+      return;
+    }
+
+    var f = files[0];
+    console.log(escape(f.name), f.type, f.size, f.lastModifiedDate)
+
+    if (f.type !== "text/html") {
+      updateStatus("only html, please");
+      $("#drop-zone").removeClass('dragover');
+      $("#drop-mask").hide();
+      return;
+    }
+
+    new FileUpload(f);
+
+    $("#drop-zone").removeClass('dragover');
+    $("#drop-mask").hide();
+  }
+
+  function handleDragOver(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+    $("#drop-zone").addClass('dragover');
+    $("#drop-mask").show();
+    updateStatus("let go");
+  }
+
+  function handleDragLeave(evt) {
+    evt.stopPropagation();
+    evt.preventDefault();
+
+    $("#drop-zone").removeClass('dragover');
+    $("#drop-mask").hide();
+    updateStatus("");
+  }
+
+  // Setup the dnd listeners.
+  var dropzone = document.getElementById("drop-zone");
+  var dropmask = document.getElementById("drop-mask");
+  dropzone.addEventListener('dragover', handleDragOver, false);
+  dropmask.addEventListener('drop', handleFileSelect, false);
+  dropmask.addEventListener('dragleave', handleDragLeave, false);
+</script>
+{% endblock body %}

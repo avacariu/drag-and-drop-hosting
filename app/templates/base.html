@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+
+  <title>{% if title %}{{ title }}{% else %}dotfile{% endif %}</title>
+
+  <script src="https://use.typekit.net/mig1aoz.js"></script>
+  <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+
+</head>
+<body>
+{% block body %}
+{% endblock body %}
+</body>
+</html>
