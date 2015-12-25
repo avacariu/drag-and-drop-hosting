@@ -42,7 +42,7 @@ def items():
             item = Item(uuid=uuid_,
                         expires=expires,
                         delete_key=delete_key,
-                        uri="http://s3.amazonaws.com/dotfile.ca/" + name)
+                        uri="https://s3.amazonaws.com/dotfile.ca/" + name)
 
             db.session.add(item)
             db.session.commit()
