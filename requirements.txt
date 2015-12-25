@@ -3,3 +3,4 @@ flask-sqlalchemy
 flask-migrate
 flask-script
 boto3
+psycopg2
