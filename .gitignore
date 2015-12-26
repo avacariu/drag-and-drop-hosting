@@ -1,7 +1,8 @@
 *.swp
 venv/
 __pycache__/
-.ropeproject
+.ropeproject/
+.vagrant/
 
 local_config.py
 app.db
